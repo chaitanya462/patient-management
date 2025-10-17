@@ -29,4 +29,12 @@ public class GlobalExceptionHandler {
         errors.put("message", "Email already exists");
         return ResponseEntity.badRequest().body(errors);
     }
+
+    @ExceptionHandler(PatientDoesNotExistsException.class)
+    public ResponseEntity<?> handlePatientDoesNotExistsException(PatientDoesNotExistsException ex) {
+        log.warn(ex.getMessage());
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", "Patient does not exists");
+        return ResponseEntity.badRequest().body(errors);
+    }
 }

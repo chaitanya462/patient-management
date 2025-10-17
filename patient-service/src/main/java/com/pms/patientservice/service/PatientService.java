@@ -3,10 +3,13 @@ package com.pms.patientservice.service;
 import com.pms.patientservice.dto.PatientRequestDto;
 import com.pms.patientservice.dto.PatientResponseDto;
 import com.pms.patientservice.exception.EmailAlreadyExistsException;
+import com.pms.patientservice.exception.PatientDoesNotExistsException;
 import com.pms.patientservice.mapper.PatientMapper;
+import com.pms.patientservice.models.Patient;
 import com.pms.patientservice.repository.PatientRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class PatientService {
@@ -24,5 +27,13 @@ public class PatientService {
             throw new EmailAlreadyExistsException("Email already exists : " + patientRequestDto.getEmail());
         }
         return PatientMapper.getPatientDto(patientRepository.save(PatientMapper.getPatientEntity(patientRequestDto)));
+    }
+
+    public PatientResponseDto updatePatient(UUID id, PatientRequestDto patientRequestDto) {
+        Patient patient = patientRepository.findById(id).orElseThrow(()-> new PatientDoesNotExistsException("Patient with id : " + id));
+        patient.setName(patientRequestDto.getName());
+        patient.setEmail(patientRequestDto.getEmail());
+        patient.setAddress(patientRequestDto.getAddress());
+        return PatientMapper.getPatientDto(patientRepository.save(patient));
     }
 }
