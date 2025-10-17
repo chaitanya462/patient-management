@@ -39,4 +39,8 @@ public class PatientService {
         patient.setAddress(patientRequestDto.getAddress());
         return PatientMapper.getPatientDto(patientRepository.save(patient));
     }
+
+    public void deletePatient(UUID id) {
+        patientRepository.deleteById(id);
+    }
 }
